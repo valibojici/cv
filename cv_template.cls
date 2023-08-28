@@ -9,6 +9,7 @@
 \RequirePackage{hyperref}
 \RequirePackage{geometry}
 \RequirePackage{float}
+\RequirePackage{graphicx}
 %  ----------------------------
 %           SPACING
 %  ----------------------------
@@ -22,7 +23,7 @@
 \def\titleTopSpacing{-\baselineskip} % default = -\baselineskip
 \def\titleBottomMargin{-\baselineskip} % default = -\baselineskip
 \def\titleInnerTopSpacing{-\baselineskip} % default = -\baselineskip
-\def\titleInnerBottomSpacing{-\baselineskip} % default = -\baselineskip
+\def\titleInnerBottomSpacing{-1.25\baselineskip} % default = -1.25\baselineskip
 
 \def\sectionTopSpacing{2.5ex plus 1ex minus .2ex} % default = 1ex plus 1ex minus .2ex
 \def\sectionBottomSpacing{0em} % default = 1ex plus 1ex minus .2ex
@@ -75,14 +76,15 @@
 \newcommand{\nameAndContact}[1]{
   \vspace*{\titleTopSpacing}
   
-  \clist_set:Nn \l_tmpa_clist {#1} % Store the clist in a temporary variable
-  \clist_pop:NN \l_tmpa_clist \l_tmpa_tl % Pop the first item and store it in a token list
+  \clist_set:Nn \contactList {#1} % Store the clist in a temporary variable
+  \clist_pop:NN \contactList \firstContact % Pop the first item and store it in a token list
+  
   \begin{table}[!htbp]
       \vspace*{\titleInnerTopSpacing}
       
       \begin{tabularx}{\textwidth}{ >{\Huge\centering\arraybackslash}X r}
-          \multirow{\clist_count:N \l_tmpa_clist }{*}{ \l_tmpa_tl }
-          \clist_map_inline:Nn \l_tmpa_clist { & ##1 \\ }
+          \multirow{\clist_count:N \contactList }{*}{ \firstContact }
+          \clist_map_inline:Nn \contactList { & ##1 \\ }
       \end{tabularx}
 
       \vspace*{\titleInnerBottomSpacing} 
@@ -93,6 +95,42 @@
 \ExplSyntaxOff
 % ------------------------------------------
 
+
+% ----------- PHOTO + NAME AND CONTACT -----------
+\ExplSyntaxOn
+\NewDocumentCommand{\cvHeader}{o m m}{%
+  % #1 = photo - optional
+  % #2 = name
+  % #3 = list of contacts
+  \vspace*{\titleTopSpacing}
+  
+  \clist_set:Nn \contactList {#3} % Store the clist in a temporary variable
+  \clist_pop:NN \contactList \firstContact % Pop the first item and store it in a token list
+
+  \begin{table}[!htbp]
+      \vspace*{\titleInnerTopSpacing}
+
+      % Version 1 - with photo
+      \IfValueTF{#1}{%
+        \begin{tabularx}{\textwidth}{>{\centering\arraybackslash}c >{\huge\centering\arraybackslash}X r }
+          \multirow{\clist_count:N \contactList}{*}{ \includegraphics[height=2.5cm]{#1} } &
+          \multirow{\clist_count:N \contactList }{*}{ #2 } & \firstContact \\
+          \clist_map_inline:Nn \contactList { & & ##1 \\ }
+        \end{tabularx}
+      }{%
+        % Version 2 - no photo
+        \begin{tabularx}{\textwidth}{>{\Huge\centering\arraybackslash}X r }
+          \multirow{\clist_count:N \contactList }{*}{ #2 } & \firstContact \\
+          \clist_map_inline:Nn \contactList { & ##1 \\ }
+        \end{tabularx}
+      }
+      \vspace*{\titleInnerBottomSpacing} 
+  \end{table}
+    
+  \vspace*{\titleBottomMargin} 
+}
+\ExplSyntaxOff
+% ------------------------------------------
 
 
 % -------- DATED SECTION --------
