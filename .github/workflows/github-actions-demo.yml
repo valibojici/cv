@@ -11,12 +11,12 @@ jobs:
         run: |
           LATEX_FILE=$(find . -name '*.tex' -print -quit)
           echo "Found LaTeX file: $LATEX_FILE"
-          echo "::set-env name=LATEX_FILE::$LATEX_FILE"
+          echo "LATEX_FILE=$LATEX_FILE" >> "$GITHUB_ENV"
 
       - name: Compile LaTeX document    
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: ${{ env.LATEX_FILE }}
+          root_file: $LATEX_FILE
 
       - name: Upload PDF file
         uses: actions/upload-artifact@v3
