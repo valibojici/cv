@@ -10,16 +10,16 @@ jobs:
       - name: Find LaTeX file
         run: |
           LATEX_FILE=$(find . -name '*.tex' -print -quit)
-          echo "Found LaTeX file: $LATEX_FILE"
-          echo "LATEX_FILE=$LATEX_FILE" >> "$GITHUB_ENV"
+          FILE_NAME=$(basename -s .tex $LATEX_FILE)
+          echo "FILE_NAME=$FILE_NAME" >> "$GITHUB_ENV"
 
       - name: Compile LaTeX document    
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: $LATEX_FILE
+          root_file: $LATEX_FILE.tex
 
       - name: Upload PDF file
         uses: actions/upload-artifact@v3
         with:
           name: PDF
-          path: Valentin_Bojici_Resume.pdf
+          path: $FILE_NAME.pdf
