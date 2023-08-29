@@ -16,7 +16,7 @@ jobs:
       - name: Compile LaTeX document    
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: $LATEX_FILE.tex
+          root_file: $FILE_NAME.tex
 
       - name: Upload PDF file
         uses: actions/upload-artifact@v3
