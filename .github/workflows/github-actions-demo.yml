@@ -1,19 +1,25 @@
-name: GitHub Actions Demoo
-run-name: ${{ github.actor }} is testing out GitHub Actions ??
+name: Build LaTeX CV
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  build_latex:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "?? The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "?? This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "?? The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+      - name: Set up Git repository
         uses: actions/checkout@v3
-      - run: echo "?? The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "??? The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      
+      - name: Find LaTeX file
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "?? This job's status is ${{ job.status }}."
+          LATEX_FILE=$(find . -name '*.tex' -print -quit)
+          echo "Found LaTeX file: $LATEX_FILE"
+          echo "::set-env name=LATEX_FILE::$LATEX_FILE"
 
+      - name: Compile LaTeX document    
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: ${{ env.LATEX_FILE }}
+
+      - name: Upload PDF file
+        uses: actions/upload-artifact@v3
+        with:
+          name: PDF
+          path: Valentin_Bojici_Resume.pdf
