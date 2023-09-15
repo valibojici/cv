@@ -1,0 +1,1 @@
+pdflatex .\Valentin_Bojici_Resume.tex -job-name="Valentin_Bojici_Resume"

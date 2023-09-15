@@ -10,6 +10,7 @@
 \RequirePackage{geometry}
 \RequirePackage{float}
 \RequirePackage{graphicx}
+\RequirePackage{fontawesome}
 %  ----------------------------
 %           SPACING
 %  ----------------------------
